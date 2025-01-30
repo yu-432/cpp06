@@ -6,7 +6,7 @@
 /*   By: yooshima <yooshima@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:16:07 by yooshima          #+#    #+#             */
-/*   Updated: 2025/01/30 16:01:43 by yooshima         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:27:22 by yooshima         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 
 #include <string>
+#include <sstream>
 #include <iostream>
 
 class ScalarConverter {
