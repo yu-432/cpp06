@@ -6,17 +6,20 @@
 /*   By: yooshima <yooshima@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:16:07 by yooshima          #+#    #+#             */
-/*   Updated: 2025/01/30 20:28:05 by yooshima         ###   ########.fr       */
+/*   Updated: 2025/02/02 19:47:00 by yooshima         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SCALARCONVERTER_HPP
 #define SCALARCONVERTER_HPP
 
-
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <cstdlib>
+#include <climits>
+#include <iomanip>
+#include <cfloat>
 
 class ScalarConverter {
   public:
@@ -26,16 +29,16 @@ class ScalarConverter {
     ScalarConverter();
     ScalarConverter(const ScalarConverter& src);
     ~ScalarConverter();
+    
     ScalarConverter& operator=(const ScalarConverter& src);
     
     static void convertChar(const std::string& str);
     static void convertInt(const std::string& str);
     static void convertFloat(const std::string& str);
     static void convertDouble(const std::string& str);
-    static bool isChar(const int num);
-    static bool isInt(const std::string& str);
-    static bool isFloat(const std::string& str);
-    static bool isDouble(const std::string& str);
+    static bool isValidInput(const std::string& str);
+    static bool isPseudoLiteral(const std::string& str);
+    static size_t countAfterDecimalPoint(const std::string& str);
 };
 
 #endif
