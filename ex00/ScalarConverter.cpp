@@ -6,7 +6,7 @@
 /*   By: yooshima <yooshima@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:10:24 by yooshima          #+#    #+#             */
-/*   Updated: 2025/02/02 19:46:53 by yooshima         ###   ########.fr       */
+/*   Updated: 2025/02/02 20:04:59 by yooshima         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void ScalarConverter::convertInt(const std::string& str) {
 }
 
 void ScalarConverter::convertFloat(const std::string& str) {
-  if (!isValidInput(str)) {
+  if (!isValidInput(str) || !isPseudoLiteral(str)) {
     std::cout << "float: impossible" << std::endl;
     return;
   }
@@ -79,7 +79,7 @@ void ScalarConverter::convertFloat(const std::string& str) {
 }
 
 void ScalarConverter::convertDouble(const std::string& str) {
-  if (!isValidInput(str)) {
+  if (!isValidInput(str) || !isPseudoLiteral(str)) {
     std::cout << "double: impossible" << std::endl;
     return;
   }
@@ -99,7 +99,6 @@ bool ScalarConverter::isPseudoLiteral(const std::string& str) {
 }
 
 bool ScalarConverter::isValidInput(const std::string& str) {
-  if (isPseudoLiteral(str)) return true;
   if (str.find_first_not_of("0123456789+-.f") == std::string::npos) {
     if (str.find('+') != str.rfind('+') || str.find('-') != str.rfind('-') ||
         str.find('.') != str.rfind('.') || str.find('f') != str.rfind('f'))
