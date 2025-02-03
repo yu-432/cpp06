@@ -6,7 +6,7 @@
 /*   By: yooshima <yooshima@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:10:24 by yooshima          #+#    #+#             */
-/*   Updated: 2025/02/02 20:04:59 by yooshima         ###   ########.fr       */
+/*   Updated: 2025/02/03 13:55:11 by yooshima         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ ScalarConverter& ScalarConverter::operator=(const ScalarConverter& src) {
 }
 
 void ScalarConverter::convert(const std::string& str) {
+  std::cout << "========= Input: " << str << " =========" << std::endl;
   convertChar(str);
   convertInt(str);
   convertFloat(str);
@@ -37,15 +38,15 @@ void ScalarConverter::convertChar(const std::string& str) {
   }
 
   double d = strtod(str.c_str(), NULL);
-  if (CHAR_MAX < d || CHAR_MIN > d || d == HUGE_VAL) {
+  if (CHAR_MAX < d || CHAR_MIN > d || errno == ERANGE) {
     std::cout << "char: overflowed" << std::endl;
     return;
   }
-  if (!isprint(static_cast<int>(d))) {
+  if (!isprint(d)) {
     std::cout << "char: Non displayable" << std::endl;
     return;
   }
-  std::cout << "char: " << (unsigned char)d << std::endl;
+  std::cout << "char: " << static_cast<unsigned char>(d) << std::endl;
 }
 
 void ScalarConverter::convertInt(const std::string& str) {
@@ -55,7 +56,7 @@ void ScalarConverter::convertInt(const std::string& str) {
   }
 
   double d = strtod(str.c_str(), NULL);
-  if (INT_MAX < d || INT_MIN > d || d == HUGE_VAL) {
+  if (INT_MAX < d || INT_MIN > d || errno == ERANGE) {
     std::cout << "int: overflowed" << std::endl;
     return;
   }
@@ -63,13 +64,14 @@ void ScalarConverter::convertInt(const std::string& str) {
 }
 
 void ScalarConverter::convertFloat(const std::string& str) {
-  if (!isValidInput(str) || !isPseudoLiteral(str)) {
+  if (!isValidInput(str) && !isPseudoLiteral(str)) {
     std::cout << "float: impossible" << std::endl;
     return;
   }
 
   double d = strtod(str.c_str(), NULL);
-  if (!isPseudoLiteral(str) && (FLT_MAX < d || -FLT_MAX > d || d == HUGE_VAL)) {
+  if (!isPseudoLiteral(str) &&
+      (FLT_MAX < d || -FLT_MAX > d || errno == ERANGE)) {
     std::cout << "float: overflowed" << std::endl;
     return;
   }
@@ -79,13 +81,13 @@ void ScalarConverter::convertFloat(const std::string& str) {
 }
 
 void ScalarConverter::convertDouble(const std::string& str) {
-  if (!isValidInput(str) || !isPseudoLiteral(str)) {
+  if (!isValidInput(str) && !isPseudoLiteral(str)) {
     std::cout << "double: impossible" << std::endl;
     return;
   }
 
   double d = strtod(str.c_str(), NULL);
-  if (!isPseudoLiteral(str) && d == HUGE_VAL) {
+  if (!isPseudoLiteral(str) && errno == ERANGE) {
     std::cout << "double: overflowed" << std::endl;
     return;
   }
@@ -102,6 +104,9 @@ bool ScalarConverter::isValidInput(const std::string& str) {
   if (str.find_first_not_of("0123456789+-.f") == std::string::npos) {
     if (str.find('+') != str.rfind('+') || str.find('-') != str.rfind('-') ||
         str.find('.') != str.rfind('.') || str.find('f') != str.rfind('f'))
+      return false;
+    if (str.find('+') != std::string::npos &&
+        str.find('-') != std::string::npos)
       return false;
     if (str.find('f') != std::string::npos && str.find('f') != str.length() - 1)
       return false;
